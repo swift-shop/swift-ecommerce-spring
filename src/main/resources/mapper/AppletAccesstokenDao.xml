@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swift.ecommerce.dao.AppletAccesstokenDao">
+
+    <resultMap type="com.swift.ecommerce.entity.AppletAccesstoken" id="AppletAccesstokenMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="unionid" column="unionid" jdbcType="VARCHAR"/>
+        <result property="openid" column="openid" jdbcType="VARCHAR"/>
+        <result property="sessionKey" column="session_key" jdbcType="VARCHAR"/>
+        <result property="accessToken" column="access_token" jdbcType="VARCHAR"/>
+        <result property="expireTime" column="expire_time" jdbcType="TIMESTAMP"/>
+        <result property="customerId" column="customer_id" jdbcType="INTEGER"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="isActive" column="is_active" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AppletAccesstokenMap">
+        select
+        id, unionid, openid, session_key, access_token, expire_time, customer_id, type, nickname, avatar, is_active
+        from applet_accesstoken
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AppletAccesstokenMap">
+        select
+        id, unionid, openid, session_key, access_token, expire_time, customer_id, type, nickname, avatar, is_active
+        from applet_accesstoken
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="unionid != null and unionid != ''">
+                and unionid = #{unionid}
+            </if>
+            <if test="openid != null and openid != ''">
+                and openid = #{openid}
+            </if>
+            <if test="sessionKey != null and sessionKey != ''">
+                and session_key = #{sessionKey}
+            </if>
+            <if test="accessToken != null and accessToken != ''">
+                and access_token = #{accessToken}
+            </if>
+            <if test="expireTime != null">
+                and expire_time = #{expireTime}
+            </if>
+            <if test="customerId != null">
+                and customer_id = #{customerId}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname = #{nickname}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and avatar = #{avatar}
+            </if>
+            <if test="isActive != null">
+                and is_active = #{isActive}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from applet_accesstoken
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="unionid != null and unionid != ''">
+                and unionid = #{unionid}
+            </if>
+            <if test="openid != null and openid != ''">
+                and openid = #{openid}
+            </if>
+            <if test="sessionKey != null and sessionKey != ''">
+                and session_key = #{sessionKey}
+            </if>
+            <if test="accessToken != null and accessToken != ''">
+                and access_token = #{accessToken}
+            </if>
+            <if test="expireTime != null">
+                and expire_time = #{expireTime}
+            </if>
+            <if test="customerId != null">
+                and customer_id = #{customerId}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname = #{nickname}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and avatar = #{avatar}
+            </if>
+            <if test="isActive != null">
+                and is_active = #{isActive}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into applet_accesstoken(unionid, openid, session_key, access_token, expire_time, customer_id, type,
+        nickname, avatar, is_active)
+        values (#{unionid}, #{openid}, #{sessionKey}, #{accessToken}, #{expireTime}, #{customerId}, #{type},
+        #{nickname}, #{avatar}, #{isActive})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into applet_accesstoken(unionid, openid, session_key, access_token, expire_time, customer_id, type,
+        nickname, avatar, is_active)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.unionid}, #{entity.openid}, #{entity.sessionKey}, #{entity.accessToken}, #{entity.expireTime},
+            #{entity.customerId}, #{entity.type}, #{entity.nickname}, #{entity.avatar}, #{entity.isActive})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into applet_accesstoken(unionid, openid, session_key, access_token, expire_time, customer_id, type,
+        nickname, avatar, is_active)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.unionid}, #{entity.openid}, #{entity.sessionKey}, #{entity.accessToken}, #{entity.expireTime},
+            #{entity.customerId}, #{entity.type}, #{entity.nickname}, #{entity.avatar}, #{entity.isActive})
+        </foreach>
+        on duplicate key update
+        unionid = values(unionid),
+        openid = values(openid),
+        session_key = values(session_key),
+        access_token = values(access_token),
+        expire_time = values(expire_time),
+        customer_id = values(customer_id),
+        type = values(type),
+        nickname = values(nickname),
+        avatar = values(avatar),
+        is_active = values(is_active)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update applet_accesstoken
+        <set>
+            <if test="unionid != null and unionid != ''">
+                unionid = #{unionid},
+            </if>
+            <if test="openid != null and openid != ''">
+                openid = #{openid},
+            </if>
+            <if test="sessionKey != null and sessionKey != ''">
+                session_key = #{sessionKey},
+            </if>
+            <if test="accessToken != null and accessToken != ''">
+                access_token = #{accessToken},
+            </if>
+            <if test="expireTime != null">
+                expire_time = #{expireTime},
+            </if>
+            <if test="customerId != null">
+                customer_id = #{customerId},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="isActive != null">
+                is_active = #{isActive},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from applet_accesstoken where id = #{id}
+    </delete>
+
+</mapper>
+
